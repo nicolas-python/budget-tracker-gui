@@ -27,49 +27,60 @@ class budget_tracker:
         self.button_price = tkinter.Button(root, text="Preis", command=self.button_price_click)
         self.button_price.pack()
 
-        #unterklassen knöpfe_typ
-        self.button_income = tkinter.Button(root, text="Einnahme", command=lambda: self.set_typ("Einnahme"))   #lambda: wenn geklickt wird → rufe set_typ(Einnahme) auf
-        self.button_income.pack_forget()                        #forget() verteckt erstmal den knopf
+        #unterklassen knöpfe
+        # _typ
+        self.frame_typ = tkinter.Frame(root)        #frame =Mini-Container innerhalb des Fensters man kan alles darin verstecken (root im vergleich Hauptfenster)
+        self.button_income = tkinter.Button(self.frame_typ, text="Einnahme", command=lambda: self.set_typ("Einnahme"))   #lambda: wenn geklickt wird → rufe set_typ(Einnahme) auf
+        self.button_income.pack()
 
-        self.button_expense = tkinter.Button(root, text="Ausgabe", command=lambda: self.set_typ("Ausgabe"))
-        self.button_expense.pack_forget()        #forget() verteckt erstmal den knopf
+        self.button_expense = tkinter.Button(self.frame_typ, text="Ausgabe", command=lambda: self.set_typ("Ausgabe"))
+        self.button_expense.pack()
+        self.frame_typ.pack_forget()       #forget() verteckt erstmal den knopf
 
         #_category
-        self.button_fixed_costs = tkinter.Button(root, text="Fixkosten",command=lambda: self.set_category("Fixkosten"))
-        self.button_fixed_costs.pack_forget()
+        self.frame_category = tkinter.Frame(root)
+        self.button_fixed_costs = tkinter.Button(self.frame_category, text="Fixkosten",command=lambda: self.set_category("Fixkosten"))
+        self.button_fixed_costs.pack()
 
-        self.button_hobbies = tkinter.Button(root, text="Hobbys", command=lambda: self.set_hobbies("Hobbys"))
-        self.button_hobbies.pack_forget()
+        self.button_hobbies = tkinter.Button(self.frame_category, text="Hobbys", command=lambda: self.set_hobbies("Hobbys"))
+        self.button_hobbies.pack()
 
-        self.button_food = tkinter.Button(root, text="Essen", command=lambda: self.set_food("Essen"))
-        self.button_food.pack_forget()
+        self.button_food = tkinter.Button(self.frame_category, text="Essen", command=lambda: self.set_food("Essen"))
+        self.button_food.pack()
+        self.frame_category.pack_forget()
 
         #_price
-        self.button_price_value = tkinter.Button(root, text="Preis", command=lambda: self.set_price_value("Preis"))
-        self.button_price_value.pack_forget()
-
+        self.frame_price = tkinter.Frame(root)
+        self.button_price_value = tkinter.Button(self.frame_price, text="Preis", command=lambda: self.set_price_value("Preis"))
+        self.button_price_value.pack()
+        self.frame_price.pack_forget()
 
         #knöpfe benutzen
     def button_typ_click(self):
         typ_wert = self.entry_typ.get()
         print("Typ:", typ_wert)
 
-        self.button_income.pack()
-        self.button_expense.pack()
+        self.hide_all_frames()  #alle Frames ausblenden
+        self.frame_typ.pack()  #nur Typ-Frame anzeigen
 
     def button_category_click(self):
         kategorie_wert = self.entry_category.get()
         print("Kategorie:", kategorie_wert)
 
-        self.button_fixed_costs.pack()
-        self.button_hobbies.pack()
-        self.button_food.pack()
+        self.hide_all_frames()
+        self.frame_category.pack()  #nur Kategorie-Frame anzeigen
 
     def button_price_click(self):
         preis_wert = self.entry_price.get()
         print("Preis:", preis_wert)
 
-        self.button_price_value.pack()
+        self.hide_all_frames()
+        self.frame_price.pack()
+
+    def hide_all_frames(self):
+        self.frame_typ.pack_forget()
+        self.frame_category.pack_forget()
+        self.frame_price.pack_forget()
 
     #klassen
     def typ(self):
