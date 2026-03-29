@@ -7,7 +7,12 @@ class budget_tracker:
     def __init__(self,root):
         self.root = root
         self.root.title("Budget Tracker")
-        self.root.geometry("300x200")         # größe fenster
+        self.root.geometry("400x350")         # größe fenster
+
+        #variablen für liste(zwischenspeichern)
+        self.typ = ""
+        self.category = ""
+        self.price = ""
 
         # fenster erstellen/öffnen
         self.entry_typ = tkinter.Entry(root)        #Eingabe für Typ
@@ -16,6 +21,10 @@ class budget_tracker:
         self.entry_category.pack()
         self.entry_price = tkinter.Entry(root)      #Eingabe für Preis
         self.entry_price.pack()
+
+        #liste
+        self.listbox = tkinter.Listbox(root)  #zeigt alle Einträge, liste im fenster
+        self.listbox.pack()
 
         # erstellen knöpfe
         self.button = tkinter.Button(root, text="Typ", command=self.button_typ_click)
@@ -55,6 +64,9 @@ class budget_tracker:
         self.button_price_value.pack()
         self.frame_price.pack_forget()
 
+        self.button_save = tkinter.Button(root, text="Speichern", command=self.save_entry)  #speichert alles
+        self.button_save.pack()
+
         #knöpfe benutzen
     def button_typ_click(self):
         typ_wert = self.entry_typ.get()
@@ -64,8 +76,8 @@ class budget_tracker:
         self.frame_typ.pack()  #nur Typ-Frame anzeigen
 
     def button_category_click(self):
-        kategorie_wert = self.entry_category.get()
-        print("Kategorie:", kategorie_wert)
+        category_wert = self.entry_category.get()
+        print("Kategorie:", category_wert)
 
         self.hide_all_frames()
         self.frame_category.pack()  #nur Kategorie-Frame anzeigen
@@ -97,19 +109,34 @@ class budget_tracker:
 
     #unterklassen für butten clicks+anzeige durch print
     def set_typ(self, wert):
+        self.typ = wert
         print("Typ ausgewählt:", wert)
 
     def set_category(self, wert):
+        self.category = wert
         print("Kategorie ausgewählt:", wert)
 
+
     def set_hobbies(self, wert):
+        self.category = wert
         print("Hobby ausgewählt:", wert)
 
     def set_food(self, wert):
+        self.category = wert
         print("Essen ausgewählt:", wert)
 
     def set_price_value(self, wert):
+        self.price = wert
         print("Preiswert ausgewählt:", wert)
+
+    #alles speichern
+    def save_entry(self):
+        self.price = self.entry_price.get()
+
+        input_value = f"{self.typ} {self.category} {self.price}"
+        print("Gespeichert",input_value)
+
+        self.listbox.insert(tkinter.END, input_value)
 
 #starten
 root=tkinter.Tk()    #Tk-Klasse aufrufen und hauptfenster erstellen
