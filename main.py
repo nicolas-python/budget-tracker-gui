@@ -36,6 +36,14 @@ class budget_tracker:
         self.button_price = tkinter.Button(root, text="Preis", command=self.button_price_click)
         self.button_price.pack()
 
+        #speichern
+        self.button_save = tkinter.Button(root, text="Speichern", command=self.save_entry)  #speichert alles
+        self.button_save.pack()
+
+        #laden
+        self.button_load = tkinter.Button(root, text="Laden", command=self.load_entry)  # neu
+        self.button_load.pack()
+
         #unterklassen knöpfe
         # _typ
         self.frame_typ = tkinter.Frame(root)        #frame =Mini-Container innerhalb des Fensters man kan alles darin verstecken (root im vergleich Hauptfenster)
@@ -64,8 +72,6 @@ class budget_tracker:
         self.button_price_value.pack()
         self.frame_price.pack_forget()
 
-        self.button_save = tkinter.Button(root, text="Speichern", command=self.save_entry)  #speichert alles
-        self.button_save.pack()
 
         #knöpfe benutzen
     def button_typ_click(self):
@@ -93,6 +99,28 @@ class budget_tracker:
         self.frame_typ.pack_forget()
         self.frame_category.pack_forget()
         self.frame_price.pack_forget()
+
+    def load_entry(self):
+        selection = self.listbox.curselection()
+
+        if selection:
+            content = self.listbox.get(selection[0])           # curselection= gibt zurück, welcher Eintrag angeklickt wurde in liste
+            typ, category, price = content.split(" ")          #text in einzelne werte trennen das ich die variablen benutzen kan
+
+            #löschen alte werte
+            self.entry_typ.delete(0, tkinter.END)
+            self.entry_category.delete(0, tkinter.END)
+            self.entry_price.delete(0, tkinter.END)
+
+            #neue werte benutzen
+            self.entry_typ.insert(0, typ)
+            self.entry_category.insert(0, category)
+            self.entry_price.insert(0, price)
+
+            #variablen für aktualisierung
+            self.typ = typ
+            self.category = category
+            self.price = price
 
     #klassen
     def typ(self):
