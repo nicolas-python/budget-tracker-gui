@@ -1,10 +1,25 @@
 #budget tracker gui
 
 import tkinter
+import sqlite3
 
 #knöpfe mit oop
 class budget_tracker:
     def __init__(self,root):
+        #verbindung datenbank
+        self.conn = sqlite3.connect("budget.db")
+        self.c = self.conn.cursor()
+
+        # Tabelle erstellen, falls noch nicht vorhanden
+        self.c.execute("""
+        CREATE TABLE IF NOT EXISTS entries (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            typ TEXT NOT NULL,
+            category TEXT NOT NULL,
+            price REAL NOT NULL
+        )
+        """)                                    #real, gespeichert werden kan
+        self.conn.commit()
         self.root = root
         self.root.title("Budget Tracker")
         self.root.geometry("400x350")         # größe fenster
@@ -165,6 +180,11 @@ class budget_tracker:
         print("Gespeichert",input_value)
 
         self.listbox.insert(tkinter.END, input_value)
+
+        #in datenbank einfügen
+        self.c.execute("INSERT INTO entries (typ, category , price) VALUES (?, ?, ?)",
+                       (self.typ, self.category, self.price))
+        self.conn.commit()
 
 #starten
 root=tkinter.Tk()    #Tk-Klasse aufrufen und hauptfenster erstellen
