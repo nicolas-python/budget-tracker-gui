@@ -56,7 +56,7 @@ class budget_tracker:
         self.button_save.pack()
 
         #laden
-        self.button_load = tkinter.Button(root, text="Laden", command=self.load_entry)  # neu
+        self.button_load = tkinter.Button(root, text="Laden", command=self.load_all_entries)
         self.button_load.pack()
 
         #unterklassen knöpfe
@@ -185,6 +185,16 @@ class budget_tracker:
         self.c.execute("INSERT INTO entries (typ, category , price) VALUES (?, ?, ?)",
                        (self.typ, self.category, self.price))
         self.conn.commit()
+
+    #alle Einträge in Listbox laden
+    def load_all_entries(self):
+        self.listbox.delete(0, tkinter.END)  # alte Einträge entfernen
+        self.c.execute("SELECT typ, category, price FROM entries")  # alle Daten aus Datenbank holen
+        rows = self.c.fetchall()
+        for row in rows:
+            typ, category, price = row
+            display_text = f"{typ} | {category} | {price}"
+            self.listbox.insert(tkinter.END, display_text)
 
 #starten
 root=tkinter.Tk()    #Tk-Klasse aufrufen und hauptfenster erstellen
