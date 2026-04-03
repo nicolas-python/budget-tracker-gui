@@ -179,11 +179,11 @@ class budget_tracker:
         input_value = f"{self.typ} {self.category} {self.price}"
         print("Gespeichert",input_value)
 
-        self.listbox.insert(tkinter.END, input_value)
+        self.load_all_entries()
 
         #in datenbank einfügen
         self.c.execute("INSERT INTO entries (typ, category , price) VALUES (?, ?, ?)",
-                       (self.typ, self.category, self.price))
+            (self.typ, self.category, self.price))
         self.conn.commit()
 
     #alle Einträge in Listbox laden
