@@ -22,7 +22,7 @@ class budget_tracker:
         self.conn.commit()
         self.root = root
         self.root.title("Budget Tracker")
-        self.root.geometry("400x350")         # größe fenster
+        self.root.geometry("600x450")         # größe fenster
 
         #variablen für liste(zwischenspeichern)
         self.typ = ""
@@ -58,6 +58,10 @@ class budget_tracker:
         #laden
         self.button_load = tkinter.Button(root, text="Laden", command=self.load_all_entries)
         self.button_load.pack()
+
+        #löschen
+        self.button_delete_all = tkinter.Button(root, text="Alles löschen", command=self.delete_all_entries)
+        self.button_delete_all.pack()
 
         #unterklassen knöpfe
         # _typ
@@ -137,6 +141,13 @@ class budget_tracker:
             self.category = category
             self.price = price
 
+    #löschen
+    def delete_all_entries(self):
+        self.c.execute("DELETE FROM entries")
+        self.conn.commit()
+        self.listbox.delete(0, tkinter.END)
+        print("Alle Einträge gelöscht")
+
     #klassen
     def typ(self):
         self.button_income.pack()
@@ -150,7 +161,7 @@ class budget_tracker:
     def price(self):
         self.button_price_value.pack()
 
-    #unterklassen für butten clicks+anzeige durch print
+    #unterklassen für button clicks+anzeige durch print
     def set_typ(self, wert):
         self.typ = wert
         print("Typ ausgewählt:", wert)
@@ -179,12 +190,12 @@ class budget_tracker:
         input_value = f"{self.typ} {self.category} {self.price}"
         print("Gespeichert",input_value)
 
-        self.load_all_entries()
-
         #in datenbank einfügen
         self.c.execute("INSERT INTO entries (typ, category , price) VALUES (?, ?, ?)",
             (self.typ, self.category, self.price))
         self.conn.commit()
+
+        self.load_all_entries()
 
     #alle Einträge in Listbox laden
     def load_all_entries(self):
