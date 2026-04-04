@@ -63,6 +63,10 @@ class budget_tracker:
         self.button_delete_all = tkinter.Button(root, text="Alles löschen", command=self.delete_all_entries)
         self.button_delete_all.pack()
 
+        #rechnungsknopf
+        self.button_total = tkinter.Button(root, text="Summe anzeigen", command=self.calculate_total)
+        self.button_total.pack()
+
         #unterklassen knöpfe
         # _typ
         self.frame_typ = tkinter.Frame(root)        #frame =Mini-Container innerhalb des Fensters man kan alles darin verstecken (root im vergleich Hauptfenster)
@@ -147,6 +151,26 @@ class budget_tracker:
         self.conn.commit()
         self.listbox.delete(0, tkinter.END)
         print("Alle Einträge gelöscht")
+
+    #berechnung der Gesamtsumme (Einnahmen-Ausgaben)
+    def calculate_total(self):
+        self.c.execute("SELECT typ, price FROM entries")
+        rows = self.c.fetchall()
+
+        income = 0
+        expense = 0
+
+        for typ, price in rows:
+            if typ == "Einnahme":
+                income += price
+            elif typ == "Ausgabe":
+                expense += price
+
+        total = income - expense
+
+        print("Einnahmen:", income)
+        print("Ausgaben:", expense)
+        print("Kontostand:", total)
 
     #klassen
     def typ(self):
