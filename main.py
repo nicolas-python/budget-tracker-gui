@@ -30,26 +30,37 @@ class budget_tracker:
         self.price = ""
 
         # fenster erstellen/öffnen
-        self.entry_typ = tkinter.Entry(root)        #Eingabe für Typ
-        self.entry_typ.pack()
-        self.entry_category = tkinter.Entry(root)   #Eingabe für Kategorie
-        self.entry_category.pack()
-        self.entry_price = tkinter.Entry(root)      #Eingabe für Preis
-        self.entry_price.pack()
+        # Eingabe für Typ
+        self.frame_typ_row = tkinter.Frame(root)
+        self.frame_typ_row.pack(anchor="center")                            #grid = nebeneinander #row= zeile
+        self.entry_typ = tkinter.Entry(self.frame_typ_row)                  #column = spalte
+        self.entry_typ.grid(row=0, column=0, padx=5, pady=5)                #padx = horizontaler Abstand (links + rechts)
+                                                                            #pady = vertikaler Abstand (oben + unten)
+        # Eingabe für Kategorie
+        self.frame_category_row = tkinter.Frame(root)
+        self.frame_category_row.pack(anchor="center")                       #anchor = alles im frame nach w, e, center ausrichten
+        self.entry_category = tkinter.Entry(self.frame_category_row)        #center =mittig w=alles links e=alles rechts
+        self.entry_category.grid(row=0, column=0, padx=5, pady=5)
+
+        # Eingabe für Preis
+        self.frame_price_row = tkinter.Frame(root)
+        self.frame_price_row.pack(anchor="center")
+        self.entry_price = tkinter.Entry(self.frame_price_row)
+        self.entry_price.grid(row=0, column=0, padx=5, pady=5)
 
         #liste
         self.listbox = tkinter.Listbox(root)  #zeigt alle Einträge, liste im fenster
         self.listbox.pack()
 
         # erstellen knöpfe
-        self.button = tkinter.Button(root, text="Typ", command=self.button_typ_click)
-        self.button.pack()
+        self.button = tkinter.Button(self.frame_typ_row, text="Typ", command=self.button_typ_click)
+        self.button.grid(row=0, column=1, padx=5, pady=5)
 
-        self.button_category = tkinter.Button(root, text="Category", command=self.button_category_click)
-        self.button_category.pack()
+        self.button_category = tkinter.Button(self.frame_category_row, text="Category",command=self.button_category_click)
+        self.button_category.grid(row=0, column=1, padx=5, pady=5)
 
-        self.button_price = tkinter.Button(root, text="Preis", command=self.button_price_click)
-        self.button_price.pack()
+        self.button_price = tkinter.Button(self.frame_price_row, text="Preis", command=self.button_price_click)
+        self.button_price.grid(row=0, column=1, padx=5, pady=5)
 
         #speichern
         self.button_save = tkinter.Button(root, text="Speichern", command=self.save_entry)  #speichert alles
@@ -94,7 +105,6 @@ class budget_tracker:
         self.button_price_value = tkinter.Button(self.frame_price, text="Preis", command=lambda: self.set_price_value("Preis"))
         self.button_price_value.pack()
         self.frame_price.pack_forget()
-
 
         #knöpfe benutzen
     def button_typ_click(self):
