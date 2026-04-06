@@ -49,7 +49,7 @@ class budget_tracker:
         self.entry_price.grid(row=0, column=0, padx=5, pady=5)
 
         #liste
-        self.listbox = tkinter.Listbox(root)  #zeigt alle Einträge, liste im fenster
+        self.listbox = tkinter.Listbox(root, width=60 ,height=10)  #zeigt alle Einträge, liste im fenster #width=Breite  #height=sichtbare zeilen
         self.listbox.pack()
 
         # erstellen knöpfe
@@ -74,9 +74,14 @@ class budget_tracker:
         self.button_delete_all = tkinter.Button(root, text="Alles löschen", command=self.delete_all_entries)
         self.button_delete_all.pack()
 
+        #einzelen Eintrag löschen
+        self.button_delete_selected_entry = tkinter.Button(root,text="Eintrag Löschen",command=self.delete_selected_entry)
+        self.button_delete_selected_entry.pack()
+
         #rechnungsknopf
         self.button_total = tkinter.Button(root, text="Summe anzeigen", command=self.calculate_total)
         self.button_total.pack()
+
 
         #unterklassen knöpfe
         # _typ
@@ -234,12 +239,27 @@ class budget_tracker:
     #alle Einträge in Listbox laden
     def load_all_entries(self):
         self.listbox.delete(0, tkinter.END)  # alte Einträge entfernen
-        self.c.execute("SELECT typ, category, price FROM entries")  # alle Daten aus Datenbank holen
+        self.c.execute("SELECT id, typ,  category, price FROM entries")  # alle Daten aus Datenbank holen
         rows = self.c.fetchall()
         for row in rows:
-            typ, category, price = row
-            display_text = f"{typ} | {category} | {price}"
+            id, typ, category, price = row
+            display_text = f"{id} | {typ} | {category} | {price}"
             self.listbox.insert(tkinter.END, display_text)
+
+    #ausgewählten eintrag löschen
+    def delete_selected_entry(self):
+        selection = self.listbox.curselection()
+        if selection:
+            content = self.listbox.get(selection[0])
+            entry_id =content.split(" | ")[0]
+
+            self.c.execute("DELETE FROM entries WHERE id=?", (entry_id,))
+            self.conn.commit()
+
+            self.load_all_entries()
+            print("Eintrag wird gelöscht:", entry_id)
+        if not selection:
+            print("Bitte Eintrag auswählen")
 
 #starten
 root=tkinter.Tk()    #Tk-Klasse aufrufen und hauptfenster erstellen
