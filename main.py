@@ -81,6 +81,9 @@ class budget_tracker:
         #rechnungsknopf
         self.button_total = tkinter.Button(root, text="Summe anzeigen", command=self.calculate_total)
         self.button_total.pack()
+        #ergebnis in gui anzeigen
+        self.total_label = tkinter.Label(root, text="Kontostand: 0")
+        self.total_label.pack()
 
 
         #unterklassen knöpfe
@@ -183,9 +186,7 @@ class budget_tracker:
 
         total = income - expense
 
-        print("Einnahmen:", income)
-        print("Ausgaben:", expense)
-        print("Kontostand:", total)
+        self.total_label.config(text=f"Einnahmen: {income} | Ausgaben: {expense} | Kontostand: {total}")      #config = ändern was schon existiert
 
     #klassen
     def typ(self):
