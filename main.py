@@ -2,6 +2,7 @@
 
 import tkinter
 import sqlite3
+import tkinter.messagebox as mb                # gui popups info, warnung, fehler anzeigen
 
 #knöpfe mit oop
 class budget_tracker:
@@ -227,15 +228,19 @@ class budget_tracker:
     def save_entry(self):
         self.price = self.entry_price.get()
 
+        if not self.price:
+            mb.showerror("Fehler", "Bitte Preis eingeben!")
+            return
+
         input_value = f"{self.typ} {self.category} {self.price}"
-        print("Gespeichert",input_value)
 
         #in datenbank einfügen
         self.c.execute("INSERT INTO entries (typ, category , price) VALUES (?, ?, ?)",
             (self.typ, self.category, self.price))
         self.conn.commit()
-
         self.load_all_entries()
+
+        mb.showinfo("Gespeichert", "Eintrag wurde gespeichert")
 
     #alle Einträge in Listbox laden
     def load_all_entries(self):
@@ -258,9 +263,9 @@ class budget_tracker:
             self.conn.commit()
 
             self.load_all_entries()
-            print("Eintrag wird gelöscht:", entry_id)
-        if not selection:
-            print("Bitte Eintrag auswählen")
+            mb.showinfo("Erfolg", f"Eintrag {entry_id} wurde gelöscht")  # Popup
+        else:
+            mb.showwarning("Achtung", "Bitte wähle einen Eintrag aus!")  # Popup
 
 #starten
 root=tkinter.Tk()    #Tk-Klasse aufrufen und hauptfenster erstellen
