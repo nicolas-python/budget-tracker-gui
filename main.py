@@ -23,7 +23,7 @@ class budget_tracker:
         self.conn.commit()
         self.root = root
         self.root.title("Budget Tracker")
-        self.root.geometry("600x450")         # größe fenster
+        self.root.geometry("600x550")         # größe fenster
 
         #variablen für liste(zwischenspeichern)
         self.typ = ""
@@ -43,6 +43,12 @@ class budget_tracker:
         self.entry_category = tkinter.Entry(self.frame_category_row)        #center =mittig w=alles links e=alles rechts
         self.entry_category.grid(row=0, column=0, padx=5, pady=5)
 
+        #unterunterklassen
+        self.frame_subcategory_row = tkinter.Frame(root)
+        self.frame_subcategory_row.pack(anchor="center")
+        self.entry_subcategory = tkinter.Entry(self.frame_subcategory_row)
+        self.entry_subcategory.grid(row=0, column=0, padx=5, pady=5)
+
         # Eingabe für Preis
         self.frame_price_row = tkinter.Frame(root)
         self.frame_price_row.pack(anchor="center")
@@ -52,12 +58,6 @@ class budget_tracker:
         #liste
         self.listbox = tkinter.Listbox(root, width=60 ,height=10)  #zeigt alle Einträge, liste im fenster #width=Breite  #height=sichtbare zeilen
         self.listbox.pack()
-
-        #unterunterklassen
-        self.frame_subcategory_row = tkinter.Frame(root)
-        self.frame_subcategory_row.pack(anchor="center")
-        self.entry_subcategory = tkinter.Entry(self.frame_subcategory_row)
-        self.entry_subcategory.grid(row=0, column=0, padx=5, pady=5)
 
         # erstellen knöpfe
         self.button = tkinter.Button(self.frame_typ_row, text="Typ", command=self.button_typ_click)
@@ -123,7 +123,7 @@ class budget_tracker:
         self.frame_price.pack_forget()
 
         #unterunterklassen
-        self.button_subcategory = tkinter.Button(self.frame_subcategory_row, text="Unterunterkategorie",command=self.set_subcategory)
+        self.button_subcategory = tkinter.Button(self.frame_subcategory_row, text="Subcategory",command=self.set_subcategory)
         self.button_subcategory.grid(row=0, column=1, padx=5, pady=5)
 
         #knöpfe benutzen
