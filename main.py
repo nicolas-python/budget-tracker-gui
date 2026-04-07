@@ -53,6 +53,12 @@ class budget_tracker:
         self.listbox = tkinter.Listbox(root, width=60 ,height=10)  #zeigt alle Einträge, liste im fenster #width=Breite  #height=sichtbare zeilen
         self.listbox.pack()
 
+        #unterunterklassen
+        self.frame_subcategory_row = tkinter.Frame(root)
+        self.frame_subcategory_row.pack(anchor="center")
+        self.entry_subcategory = tkinter.Entry(self.frame_subcategory_row)
+        self.entry_subcategory.grid(row=0, column=0, padx=5, pady=5)
+
         # erstellen knöpfe
         self.button = tkinter.Button(self.frame_typ_row, text="Typ", command=self.button_typ_click)
         self.button.grid(row=0, column=1, padx=5, pady=5)
@@ -82,6 +88,7 @@ class budget_tracker:
         #rechnungsknopf
         self.button_total = tkinter.Button(root, text="Summe anzeigen", command=self.calculate_total)
         self.button_total.pack()
+
         #ergebnis in gui anzeigen
         self.total_label = tkinter.Label(root, text="Kontostand: 0")
         self.total_label.pack()
@@ -114,6 +121,10 @@ class budget_tracker:
         self.button_price_value = tkinter.Button(self.frame_price, text="Preis", command=lambda: self.set_price_value("Preis"))
         self.button_price_value.pack()
         self.frame_price.pack_forget()
+
+        #unterunterklassen
+        self.button_subcategory = tkinter.Button(self.frame_subcategory_row, text="Unterunterkategorie",command=self.set_subcategory)
+        self.button_subcategory.grid(row=0, column=1, padx=5, pady=5)
 
         #knöpfe benutzen
     def button_typ_click(self):
@@ -163,6 +174,10 @@ class budget_tracker:
             self.typ = typ
             self.category = category
             self.price = price
+
+    def set_subcategory(self):
+        self.subcategory = self.entry_subcategory.get()
+        print("Unterkategorie ausgewählt:", self.subcategory)
 
     #löschen
     def delete_all_entries(self):
@@ -232,11 +247,12 @@ class budget_tracker:
             mb.showerror("Fehler", "Bitte Preis eingeben!")
             return
 
-        input_value = f"{self.typ} {self.category} {self.price}"
+        subcategory = self.entry_subcategory.get()
+        full_category = f"{self.category} {subcategory}".strip()
 
         #in datenbank einfügen
         self.c.execute("INSERT INTO entries (typ, category , price) VALUES (?, ?, ?)",
-            (self.typ, self.category, self.price))
+            (self.typ, full_category, self.price))
         self.conn.commit()
         self.load_all_entries()
 
